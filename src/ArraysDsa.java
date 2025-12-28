@@ -1,69 +1,55 @@
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ArraysDsa {
     public static void main(String[] args) {
         int[] arr = {1,1,1,1,1,2,3,4,5};
-        int[] b = {1,2,3,4,5,6,7,8,9};
+        int[] b = {-90,1,2,3,4,5,6,7,8,9};
         int[] merged = unionOfSortedArray(arr,b);
         print(merged);
     }
 
     private static int[] unionOfSortedArray(int[] a, int b[])
     {
-        int temp[] = new int[a.length + b.length];
-        int lastAdded = -1;
-        int i = 0;
-        int j = 0;
-        int k = 0;
-        while(i < a.length && j < b.length)
-        {
-            if(a[i] == a[j]){
-                if(lastAdded != a[i]) {
-                    lastAdded = a[i];
-                    temp[k++] = a[i++];
-                    j++;
-                }
-                else {
-                    i++;
-                    j++;
-                }
+       List<Integer> result = new ArrayList<>();
+       int i = 0;
+       int j = 0;
+       while(i < a.length && j < b.length)
+       {
+          int val;
+          if(a[i] == b[j])
+          {
+              val = a[i];
+              i++;
+              j++;
+          }
+          else if(a[i] < b[j])
+          {
+              val = a[i];
+              i++;
+          }
+          else {
+              val = b[j];
+              j++;
+          }
+          if(result.isEmpty() || result.getLast() != val) result.add(val);
+       }
+       while(i < a.length)
+       {
+           if(result.isEmpty() || result.getLast() != a[i])
+               result.add(a[i]);
+           i++;
+       }
+       while (j < b.length)
+       {
+           if(result.isEmpty() || result.getLast() != b[j])
+               result.add(b[j]);
+           j++;
 
-            }
-            else if(a[i] < a[j])
-            {
-                if(lastAdded != a[i]) {
-                    lastAdded = a[i];
-                    temp[k++] = a[i++];
-                }
-                else i++;
-
-            }
-            else{
-                if(lastAdded != b[j])
-                {
-                    lastAdded = b[j];
-                    temp[k++] = b[j++];
-                }
-                else j++;
-            }
-        }
-        while(i < a.length)
-        {
-            if(lastAdded != a[i]) {
-                lastAdded = a[i];
-                temp[k++] = a[i++];
-            } else i++;
-        }
-        while(j < b.length)
-        {
-            if(lastAdded != b[j])
-            {
-                lastAdded = b[j];
-                temp[k++] = b[j++];
-            }
-            else j++;
-        }
-        return temp;
+       }
+       return result.stream().mapToInt(Integer::intValue).toArray();
     }
 
     private static void print(int[] arr) {
